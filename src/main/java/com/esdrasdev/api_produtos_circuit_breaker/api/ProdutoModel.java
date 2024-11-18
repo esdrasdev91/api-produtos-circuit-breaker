@@ -1,5 +1,11 @@
 package com.esdrasdev.api_produtos_circuit_breaker.api;
 
+import com.esdrasdev.api_produtos_circuit_breaker.client.avaliacoes.AvaliacaoModel;
+import com.esdrasdev.api_produtos_circuit_breaker.domain.Produto;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.List;
+
 public class ProdutoModel {
 
     public Long id;
