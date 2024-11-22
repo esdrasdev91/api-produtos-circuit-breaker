@@ -3,6 +3,7 @@ package com.esdrasdev.api_produtos_circuit_breaker.infra.client;
 import com.esdrasdev.api_produtos_circuit_breaker.client.avaliacoes.AvaliacaoClient;
 import com.esdrasdev.api_produtos_circuit_breaker.client.avaliacoes.AvaliacaoModel;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +30,7 @@ public class AvaliacaoClientImpl implements AvaliacaoClient {
     }
 
     @Override
+    @CircuitBreaker(name = "avaliacaoCB", fallbackMethod = "")
     public List<AvaliacaoModel> buscarTodosPorProduto(Long produtoId) {
         final List<AvaliacaoModel> avaliacoes = executarRequisicao(produtoId);
         return avaliacoes;
