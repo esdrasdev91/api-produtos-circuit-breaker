@@ -9,10 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AvaliacaoClientImpl implements AvaliacaoClient {
 
@@ -30,11 +27,13 @@ public class AvaliacaoClientImpl implements AvaliacaoClient {
     }
 
     @Override
-    @CircuitBreaker(name = "avaliacaoCB", fallbackMethod = "")
+    @CircuitBreaker(name = "avaliacaoCB", fallbackMethod = "buscarTodosProdutosNoCache")
     public List<AvaliacaoModel> buscarTodosPorProduto(Long produtoId) {
         final List<AvaliacaoModel> avaliacoes = executarRequisicao(produtoId);
         return avaliacoes;
     }
+
+    private final Map<Long, List<AvaliacaoModel>> CACHE = new HashMap<>();
 
     private List<AvaliacaoModel> executarRequisicao(Long produtoId) {
         final Map<String, Object> parametros = new HashMap<>();
@@ -50,7 +49,15 @@ public class AvaliacaoClientImpl implements AvaliacaoClient {
             throw e;
         }
 
+        logger.info("Alimentando o cache");
+        CACHE.put(produtoId, Arrays.asList(avaliacoes));
+
         return Arrays.asList(avaliacoes);
+    }
+
+    private List<AvaliacaoModel> buscarTodosProdutosNoCache(Long produtoId, Throwable e) {
+        logger.info("Buscando no Cache");
+        return CACHE.getOrDefault(produtoId, new ArrayList<>());
     }
 
 }
