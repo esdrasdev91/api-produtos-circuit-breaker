@@ -1,5 +1,6 @@
 package com.esdrasdev.api_produtos_circuit_breaker;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.core.registry.*;
 import org.slf4j.Logger;
@@ -13,23 +14,30 @@ public class CircuitBreakerConfig {
     private final Logger logger = LoggerFactory.getLogger(CircuitBreakerConfig.class);
 
     @Bean
-    public RegistryEventConsumer<CircuitBreaker> circuitBreakerLog() {
+    public RegistryEventConsumer<CircuitBreaker> circuitBreakerLog(CircuitBreakerRegistry circuitBreakerRegistry) {
         return new RegistryEventConsumer<CircuitBreaker>() {
             @Override
             public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
+                // Acessando o CircuitBreaker adicionado
+                CircuitBreaker addedCircuitBreaker = entryAddedEvent.getAddedEntry();
 
+                logger.info("CircuitBreaker added: {}", addedCircuitBreaker.getClass().getName());
+                logger.info("Initial state of CircuitBreaker: {}", addedCircuitBreaker.getClass().getSimpleName());
             }
 
             @Override
-            public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
-
+            public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemovedEvent) {
+                // Acessando o CircuitBreaker removido
+                CircuitBreaker removedCircuitBreaker = entryRemovedEvent.getRemovedEntry();
+                logger.info("CircuitBreaker removed: {}", removedCircuitBreaker.getClass().getName());
             }
 
             @Override
             public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
-
+                // Acessando o CircuitBreaker substituído
+                CircuitBreaker replacedCircuitBreaker = entryReplacedEvent.getOldEntry();
+                logger.info("CircuitBreaker replaced: {}", replacedCircuitBreaker.getClass().getName());
             }
         };
     }
-
 }
