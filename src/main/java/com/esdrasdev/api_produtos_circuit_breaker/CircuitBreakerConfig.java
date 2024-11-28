@@ -27,16 +27,10 @@ public class CircuitBreakerConfig {
 
             @Override
             public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemovedEvent) {
-                // Acessando o CircuitBreaker removido
-                CircuitBreaker removedCircuitBreaker = entryRemovedEvent.getRemovedEntry();
-                logger.info("CircuitBreaker removed: {}", removedCircuitBreaker.getClass().getName());
             }
 
             @Override
             public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
-                // Acessando o CircuitBreaker substituído
-                CircuitBreaker replacedCircuitBreaker = entryReplacedEvent.getOldEntry();
-                logger.info("CircuitBreaker replaced: {}", replacedCircuitBreaker.getClass().getName());
             }
         };
     }

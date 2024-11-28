@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-//@FeignClient(name = "avaliacaoClient", url = "http://localhost:8090")
+@FeignClient(name = "avaliacaoClient", url = "http://localhost:8090")
 public interface AvaliacaoClient {
 
     List<AvaliacaoModel> buscarTodosPorProduto(Long productId);
